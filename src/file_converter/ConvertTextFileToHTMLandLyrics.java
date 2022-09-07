@@ -21,8 +21,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 public class ConvertTextFileToHTMLandLyrics { 
-	private static final String PATH = "/BandDEKSetlists/Songs Raw/";
-	private static String HTML_OUTFILE_DIR = "/BandDEKSetlists/HTMLs/";
+	private static final String PATH = "";
+	private static String HTML_OUTFILE_DIR = "HTMLs/";
 
 	public static void main(String[] args) throws IOException {		
 		System.out.print("INPUT a text filename and hit enter:");
@@ -601,8 +601,7 @@ public class ConvertTextFileToHTMLandLyrics {
 
 		return stanzaString.toString();
 	}
-*/
-	
+*/	
 	// processes one line of stanza into HTML
 	private static String process_aline(String s) {
 
