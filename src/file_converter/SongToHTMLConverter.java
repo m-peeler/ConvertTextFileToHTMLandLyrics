@@ -1,13 +1,7 @@
 
 package file_converter;
 
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.util.List;
 
 /**
@@ -25,36 +19,17 @@ public class SongToHTMLConverter {
 	private String htmlText;
 
 	private static final String[] CHORDS = { "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
-	private static final String HTML_OUTFILE_DIR = "HTMLs/";
 	
 	public SongToHTMLConverter(Song curSong) {
 		currentSong = curSong;
 	}
 	
 	public void saveHTMLConversion() throws IOException {
-		saveHTMLConversion(HTML_OUTFILE_DIR + currentSong.getTitle() + ".html");		
+		saveHTMLConversion(Utilities.HTML_OUTFILE_DIR + currentSong.getTitle() + ".html");		
 	}
 
 	public void saveHTMLConversion(String location) throws IOException {
-		saveToLocation(getHTMLText(), location);		
-	}
-		
-	private static void saveToLocation(String contents, String location) throws IOException {
-		Writer out = null;
-		try {
-			out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(location), "UTF-8"));
-			out.write(contents);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (out != null) {
-				out.close();
-			}
-		}
+		Utilities.saveToLocation(getHTMLText(), location);		
 	}
 	
 	public String getHTMLText() {
