@@ -14,22 +14,20 @@ import java.util.List;
  * Takes a {@link Song} and converts into a file with HTML and / or Lyrics, as needed.
  * Will generate HTML and / or Lyrics on the basis of the {@link Song}'s state when
  * the {@code get} or {@code save} methods are called, then save those strings internally.
- * A persistent {@link SongLyricAndHTMLConverter} should not be relied upon if {@link Song}
+ * A persistent {@link SongToHTMLConverter} should not be relied upon if {@link Song}
  * is being regularly modified.
  * 
  * @author Michael Peeler and Jake Shore
- *
  */
-public class SongLyricAndHTMLConverter { 
+public class SongToHTMLConverter { 
 	
 	private Song currentSong;
 	private String htmlText;
-	private String lyricText;
 
 	private static final String[] CHORDS = { "A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
 	private static final String HTML_OUTFILE_DIR = "HTMLs/";
 	
-	public SongLyricAndHTMLConverter(Song curSong) throws IOException{
+	public SongToHTMLConverter(Song curSong) {
 		currentSong = curSong;
 	}
 	
@@ -40,15 +38,7 @@ public class SongLyricAndHTMLConverter {
 	public void saveHTMLConversion(String location) throws IOException {
 		saveToLocation(getHTMLText(), location);		
 	}
-	
-	public void saveLyricsConversion() throws IOException {
-		saveLyricsConversion(HTML_OUTFILE_DIR + currentSong.getTitle() + ".txt");
-	}
-	
-	public void saveLyricsConversion(String location) throws IOException {
-		saveToLocation(getLyricsText(), location);
-	}
-	
+		
 	private static void saveToLocation(String contents, String location) throws IOException {
 		Writer out = null;
 		try {
@@ -114,28 +104,26 @@ public class SongLyricAndHTMLConverter {
 	}
 	
 	private int calculateScrollDelay(String tempo) {
-		int parsedTempo;
+		int intTempo;
 		try {
-			parsedTempo = Integer.parseInt(tempo);
+			intTempo = Integer.parseInt(tempo);
 		} catch (NumberFormatException e) {
 			return -1;
 		}
 		//non-linear approximation of scroll delay time needed
 		//   tempo      60, 70, 80, 90,100,110,120,130
 		int[] delays = {300,250,210,160,110, 90, 70, 50};
-		int tempoIndex = (parsedTempo-60) / 10;   //130=7  60=0
+		int tempoIndex = (intTempo-60) / 10;   //130=7  60=0
 		if (tempoIndex < 0) tempoIndex = 0;
 		if (tempoIndex > delays.length-1) tempoIndex = delays.length - 1;
-		int delayTime = delays[tempoIndex];
-		return delayTime;
+		int delay = delays[tempoIndex];
+		return delay;
 	}
 
 	private String buildHTMLTitleAndMetadata() {
 		String variant = "master";   //TODO: replace with actual variant data
 
-		StringBuilder titleAndMetadata = new StringBuilder();
-		
-		titleAndMetadata.append("\n<div class=\"title\">" + currentSong.getTitle() + "<span></span><div class=\"authors\">"
+		StringBuilder titleAndMetadata = new StringBuilder("\n<div class=\"title\">" + currentSong.getTitle() + "<span></span><div class=\"authors\">"
 				+ currentSong.getAuthors() + "</div></div>" + "<div class=\"info\">" + "Key: " + currentSong.getChordedIn()
 				+ "&nbsp; &nbsp; Capo: " + currentSong.getCapo() + "&nbsp; &nbsp; Tempo:" + currentSong.getTempo()
 				+ "&nbsp;&nbsp;" + currentSong.getTimeSignature() + "&nbsp;&nbsp;&nbsp;<i>(Variant: " + variant);
@@ -145,7 +133,6 @@ public class SongLyricAndHTMLConverter {
 		}
 
 		titleAndMetadata.append(")</i>"); // finish metadata line
-
 		if (currentSong.getMedia() != currentSong.getDefaultResponse() && currentSong.getMedia().length() > 2) {
 			titleAndMetadata.append("<br><a href=\"" + currentSong.getMedia() + "\" target=\"_blank\">media link</a>");
 		}
@@ -170,7 +157,6 @@ public class SongLyricAndHTMLConverter {
 		Stanza currentStanza = currentSong.getStanza(stanzaName);
 		
 		htmlStanza.append("\n<div class='stanza'>");
-
 		
 		if (currentStanza != null) {
 			htmlStanza.append(buildHTMLExistingStanza(currentStanza));
@@ -264,41 +250,5 @@ public class SongLyricAndHTMLConverter {
 		}
 		return outro.append("</body></html>").toString();
 	}	
-	
-	public String getLyricsText() {
-		if (this.lyricText == null) {
-			lyricText = buildLyrics();
-		}
-		return lyricText;
-	}
-	
-	private String buildLyrics() {
-		
-		StringBuilder lyrics = new StringBuilder();
-		lyrics.append("SONG:" + currentSong.getTitle() + "  (2021-07-05)\n");
-		lyrics.append("-" + currentSong.getAuthors());
-		
-		for (String stanza : currentSong.getOrder()) {
-			Stanza curStanza = currentSong.getStanza(stanza);
-			for (StanzaLine line : curStanza.getStanzaLines()) {
-				lyrics.append(line.getLyricsLine() + "\n");
-			}
-			lyrics.append("\n");
-		}
-		lyrics.append("\n");
-		
-		return lyrics.toString();
-
-	}
-
-	public static void main(String[] args) throws IOException {	
-		
-		SongFromTextFile songMaker = new SongFromTextFile();
-		SongLyricAndHTMLConverter toHTML = new SongLyricAndHTMLConverter(songMaker.getSong());
-		toHTML.saveHTMLConversion();
-		toHTML.saveLyricsConversion();		
-		
-		System.out.println("Conversion complete\n\n");
-	}
 
 }
