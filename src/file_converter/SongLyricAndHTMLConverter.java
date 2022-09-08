@@ -33,20 +33,20 @@ public class SongLyricAndHTMLConverter {
 		currentSong = curSong;
 	}
 	
-	public void saveLyricsConversion() throws IOException {
-		saveLyricsConversion(HTML_OUTFILE_DIR + currentSong.getTitle() + ".txt");
-	}
-	
-	public void saveLyricsConversion(String location) throws IOException {
-		saveToLocation(getLyricsText(), location);
-	}
-	
 	public void saveHTMLConversion() throws IOException {
 		saveHTMLConversion(HTML_OUTFILE_DIR + currentSong.getTitle() + ".html");		
 	}
 
 	public void saveHTMLConversion(String location) throws IOException {
 		saveToLocation(getHTMLText(), location);		
+	}
+	
+	public void saveLyricsConversion() throws IOException {
+		saveLyricsConversion(HTML_OUTFILE_DIR + currentSong.getTitle() + ".txt");
+	}
+	
+	public void saveLyricsConversion(String location) throws IOException {
+		saveToLocation(getLyricsText(), location);
 	}
 	
 	private static void saveToLocation(String contents, String location) throws IOException {
@@ -89,6 +89,46 @@ public class SongLyricAndHTMLConverter {
 		header.append(buildHTMLTitleAndMetadata());
 		return header.toString();
 	}
+	
+	private String buildHTMLHead() {
+		return "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>" + currentSong.getTitle()
+			+ "</title> <link rel=\"stylesheet\" href=\"..\\SongSupport\\view.css\">"
+			+ "<script src=\"..\\SongSupport\\scroll.js\"></script>"
+			+ "<meta name=\"keywords\" content=\""+currentSong.getKeyword()+"\">"
+			+ "<meta name=\"events\" content=\""+currentSong.getEvent()+"\">"
+			+"</head>\n";
+	}
+	
+
+	private String buildHTMLTranspositionMenu() {
+		int delayTime = calculateScrollDelay(currentSong.getTempo());
+
+		// add content to include a "transposition" pull-down menu
+		return "<body>"
+				+ "<select id=\"xpose\" onchange=\"transpose()\"><option value=\"-5\">-5</option><option value=\"-4\">-4</option>"
+				+ "<option value=\"-3\">-3</option><option value=\"-2\">-2</option><option value=\"-1\">-1</option>"
+				+ "<option value=\"0\" selected>0</option><option value=\"1\">1</option><option value=\"2\">2</option>"
+				+ "<option value=\"3\">3</option><option value=\"4\">4</option><option value=\"5\">5</option>"
+				+ "<option value=\"6\">6</option></select> "
+				+ "<script>SCROLL_INTERVAL=" + delayTime + ";</script>";
+	}
+	
+	private int calculateScrollDelay(String tempo) {
+		int parsedTempo;
+		try {
+			parsedTempo = Integer.parseInt(tempo);
+		} catch (NumberFormatException e) {
+			return -1;
+		}
+		//non-linear approximation of scroll delay time needed
+		//   tempo      60, 70, 80, 90,100,110,120,130
+		int[] delays = {300,250,210,160,110, 90, 70, 50};
+		int tempoIndex = (parsedTempo-60) / 10;   //130=7  60=0
+		if (tempoIndex < 0) tempoIndex = 0;
+		if (tempoIndex > delays.length-1) tempoIndex = delays.length - 1;
+		int delayTime = delays[tempoIndex];
+		return delayTime;
+	}
 
 	private String buildHTMLTitleAndMetadata() {
 		String variant = "master";   //TODO: replace with actual variant data
@@ -112,45 +152,6 @@ public class SongLyricAndHTMLConverter {
 
 		titleAndMetadata.append("</div>");
 		return titleAndMetadata.toString();
-	}
-
-	private String buildHTMLTranspositionMenu() {
-		int delayTime = calculateScrollDelay(currentSong.getTempo());
-
-		// add content to include a "transposition" pull-down menu
-		return "<body>"
-				+ "<select id=\"xpose\" onchange=\"transpose()\"><option value=\"-5\">-5</option><option value=\"-4\">-4</option>"
-				+ "<option value=\"-3\">-3</option><option value=\"-2\">-2</option><option value=\"-1\">-1</option>"
-				+ "<option value=\"0\" selected>0</option><option value=\"1\">1</option><option value=\"2\">2</option>"
-				+ "<option value=\"3\">3</option><option value=\"4\">4</option><option value=\"5\">5</option>"
-				+ "<option value=\"6\">6</option></select> "
-				+ "<script>SCROLL_INTERVAL=" + delayTime + ";</script>";
-	}
-
-	private String buildHTMLHead() {
-		return "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>" + currentSong.getTitle()
-			+ "</title> <link rel=\"stylesheet\" href=\"..\\SongSupport\\view.css\">"
-			+ "<script src=\"..\\SongSupport\\scroll.js\"></script>"
-			+ "<meta name=\"keywords\" content=\""+currentSong.getKeyword()+"\">"
-			+ "<meta name=\"events\" content=\""+currentSong.getEvent()+"\">"
-			+"</head>\n";
-	}
-
-	private int calculateScrollDelay(String tempo) {
-		int parsedTempo;
-		try {
-			parsedTempo = Integer.parseInt(tempo);
-		} catch (NumberFormatException e) {
-			return -1;
-		}
-		//non-linear approximation of scroll delay time needed
-		//   tempo      60, 70, 80, 90,100,110,120,130
-		int[] delays = {300,250,210,160,110, 90, 70, 50};
-		int tempoIndex = (parsedTempo-60) / 10;   //130=7  60=0
-		if (tempoIndex < 0) tempoIndex = 0;
-		if (tempoIndex > delays.length-1) tempoIndex = delays.length - 1;
-		int delayTime = delays[tempoIndex];
-		return delayTime;
 	}
 
 	private String buildHTMLStanzas () {
@@ -180,10 +181,6 @@ public class SongLyricAndHTMLConverter {
 		
 		htmlStanza.append("</div>\n\n");
 		return htmlStanza.toString();
-	}
-
-	private String buildHTLMissingStanza(String stanzaName) {
-		return "<h1>?? Missing "  + stanzaName + "</h1>\n";
 	}
 
 	private String buildHTMLExistingStanza(Stanza currentStanza) {
@@ -250,6 +247,10 @@ public class SongLyricAndHTMLConverter {
 		
 		return "<span class=\"c" + chordIndex + "\">" + baseChord + "</span>" + mod;
 	}
+
+	private String buildHTLMissingStanza(String stanzaName) {
+		return "<h1>?? Missing "  + stanzaName + "</h1>\n";
+	}
 	
 	private String buildHTMLOutro() {
 		StringBuilder outro = new StringBuilder();
@@ -262,8 +263,7 @@ public class SongLyricAndHTMLConverter {
 			System.out.println ("WARNING: No CCLI value for song:" + title);
 		}
 		return outro.append("</body></html>").toString();
-	}
-	
+	}	
 	
 	public String getLyricsText() {
 		if (this.lyricText == null) {
