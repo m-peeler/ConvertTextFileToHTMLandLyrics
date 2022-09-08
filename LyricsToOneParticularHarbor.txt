@@ -1,0 +1,114 @@
+title:One Particular Harbor
+asPerformedBy:Jimmy Buffett
+authors:Jimmy Buffett
+tune:normal
+order:in,v1,ch,br,in,v2,ch2,in,dox
+chordedIn:D
+media:https://youtu.be/0NnhgTM3mAg
+capo:0
+ccli: none
+tempo:110
+timesig:4/4
+Keyword:special,secular
+event:
+
+SONG
+[v1]
+  D                      C
+I know I don't get there often enough
+        D              C
+But God knows I surely try
+       D             C
+It's a magic kind of medicine
+        G      F         D
+That no doctor could prescribe
+G   F   D
+ 
+          D                    C
+I used to rule my world from a cell phone
+ D               C
+Ships out on the sea
+         D         
+But now times are rough
+                   C
+And I got too much stuff
+         G        F        D
+Can't explain the likes of me
+
+[ch]
+                 G    A7        D
+But there's this one particular harbor
+   G       A7     D
+So far but yet so near
+        G       A7           D    Bm
+Where I see the days as they fade away
+    G     A7    D
+And finally disappear
+
+[br]
+                           A7
+But now I think about the good times
+                     D
+Down in the Caribbean sunshine
+                          A7
+In my younger days I was so bad
+                       D   G  D
+Laughin' about all the fun we had
+                          A7
+I've seen enough to feel the world spin
+                                 D
+Mixin' different oceans, meeting cousins
+                               A7
+Listen to the drummers and the night sounds
+                               D     G   D
+Listen to the singers make the world go 'round
+
+[in]
+A           D
+Ia ora te natura         (Ya Ra, Te naturah)
+        A          D
+E mea arofa teie ao nei  (mea-roha teh a nay)
+A           D
+Ia ora te natura        *Nature lives*
+       A           D
+E mea arofa teie ao nei *Have pity on the Earth*
+
+[v2]
+D                C
+Lakes below the mountain
+D             C
+Flow into the sea
+     D               C
+Like oils applied to canvas
+     G     F          D
+They permeate through me
+
+[ch2]
+                 G    A7        D
+And there's that one particular harbor
+ G        A7       D
+Sheltered from the wind    
+           G       A7          D          Bm
+Where the children play on the shore each day
+    G       A7    D
+And all are safe within
+          G     A7       D
+Most mysterious calling harbor
+    G     A7      D
+So far but yet so near
+       G      A7          D           Bm
+I can see the day when my hair's full gray
+      G     A7    D
+And I finally disappear
+
+[dox]
+A                D
+*call and response*
+       A                 D
+Praise God from whom all blessings flow
+       A                 D
+Praise God all creatures here below
+       G             D
+Praise God above all heavenly hosts
+       A                G   A  D      A D
+Praise Father, Son, and Ho--ly Ghost
